@@ -32,36 +32,38 @@ class Common(Configuration):
 
         # Useful template tags:
         # 'django.contrib.humanize',
-
+    )
+    ADMIN_APPS = (
         # Admin
+        'grappelli',
         'django.contrib.admin',
     )
     THIRD_PARTY_APPS = (
-        'crispy_forms',  # Form layouts
-        'avatar',  # for user avatars
-        'allauth',  # registration
-        'allauth.account',  # registration
-        'allauth.socialaccount',  # registration
+        # 'crispy_forms',  # Form layouts
+        # 'avatar',  # for user avatars
+        # 'allauth',  # registration
+        # 'allauth.account',  # registration
+        # 'allauth.socialaccount',  # registration
     )
 
     # Apps specific for this project go here.
     LOCAL_APPS = (
-        'users',  # custom users app
-        # Your stuff: custom apps go here
+        # 'users',  # custom users app
+        # # Your stuff: custom apps go here
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-    INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+    INSTALLED_APPS = DJANGO_APPS + ADMIN_APPS + THIRD_PARTY_APPS + LOCAL_APPS
     # END APP CONFIGURATION
 
     # MIDDLEWARE CONFIGURATION
     MIDDLEWARE_CLASSES = (
         # Make sure djangosecure.middleware.SecurityMiddleware is listed first
-        'djangosecure.middleware.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
@@ -85,18 +87,18 @@ class Common(Configuration):
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
     # Note: This key only used for development and testing.
     #       In production, this is changed to a values.SecretValue() setting
-    SECRET_KEY = "CHANGEME!!!"
+    SECRET_KEY = "1234567890!=*"
     # END SECRET CONFIGURATION
 
     # FIXTURE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
-    FIXTURE_DIRS = (
-        join(BASE_DIR, 'fixtures'),
-    )
+    # FIXTURE_DIRS = (
+    #     join(BASE_DIR, 'fixtures'),
+    # )
     # END FIXTURE CONFIGURATION
 
     # EMAIL CONFIGURATION
-    EMAIL_BACKEND = values.Value('django.core.mail.backends.smtp.EmailBackend')
+    # EMAIL_BACKEND = values.Value('django.core.mail.backends.smtp.EmailBackend')
     # END EMAIL CONFIGURATION
 
     # MANAGER CONFIGURATION
@@ -114,23 +116,23 @@ class Common(Configuration):
     DATABASES = values.DatabaseURLValue('postgres://localhost/pympa')
     # END DATABASE CONFIGURATION
 
-    # CACHING
-    # Do this here because thanks to django-pylibmc-sasl and pylibmc
-    # memcacheify (used on heroku) is painful to install on windows.
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': ''
-        }
-    }
-    # END CACHING
+    # # CACHING
+    # # Do this here because thanks to django-pylibmc-sasl and pylibmc
+    # # memcacheify (used on heroku) is painful to install on windows.
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    #         'LOCATION': ''
+    #     }
+    # }
+    # # END CACHING
 
     # GENERAL CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
-    TIME_ZONE = 'America/Los_Angeles'
+    TIME_ZONE = 'Europe/Rome'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-    LANGUAGE_CODE = 'en-us'
+    LANGUAGE_CODE = 'it-it'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
     SITE_ID = 1
@@ -209,28 +211,28 @@ class Common(Configuration):
     WSGI_APPLICATION = 'wsgi.application'
     # End URL Configuration
 
-    # AUTHENTICATION CONFIGURATION
-    AUTHENTICATION_BACKENDS = (
-        "django.contrib.auth.backends.ModelBackend",
-        "allauth.account.auth_backends.AuthenticationBackend",
-    )
-
-    # Some really nice defaults
-    ACCOUNT_AUTHENTICATION_METHOD = "username"
-    ACCOUNT_EMAIL_REQUIRED = True
-    ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-    # END AUTHENTICATION CONFIGURATION
-
-    # Custom user app defaults
-    # Select the correct user model
-    AUTH_USER_MODEL = "users.User"
-    LOGIN_REDIRECT_URL = "users:redirect"
-    LOGIN_URL = "account_login"
-    # END Custom user app defaults
-
-    # SLUGLIFIER
-    AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
-    # END SLUGLIFIER
+    # # AUTHENTICATION CONFIGURATION
+    # AUTHENTICATION_BACKENDS = (
+    #     "django.contrib.auth.backends.ModelBackend",
+    #     "allauth.account.auth_backends.AuthenticationBackend",
+    # )
+    #
+    # # Some really nice defaults
+    # ACCOUNT_AUTHENTICATION_METHOD = "username"
+    # ACCOUNT_EMAIL_REQUIRED = True
+    # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+    # # END AUTHENTICATION CONFIGURATION
+    #
+    # # Custom user app defaults
+    # # Select the correct user model
+    # AUTH_USER_MODEL = "users.User"
+    # LOGIN_REDIRECT_URL = "users:redirect"
+    # LOGIN_URL = "account_login"
+    # # END Custom user app defaults
+    #
+    # # SLUGLIFIER
+    # AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
+    # # END SLUGLIFIER
 
     # LOGGING CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging
@@ -265,3 +267,6 @@ class Common(Configuration):
     # END LOGGING CONFIGURATION
 
     # Your common stuff: Below this line define 3rd party library settings
+
+    # GRAPELLI CONFIGURATION
+    GRAPPELLI_ADMIN_TITLE = "PymPA"
