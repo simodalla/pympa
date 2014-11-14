@@ -12,6 +12,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    url(r'^pippo/$', 'users.views.pippo', name='pippo'),
     url(r'^$',  # noqa
         TemplateView.as_view(template_name='pages/home.html'),
         name="home"),

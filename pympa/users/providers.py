@@ -4,7 +4,7 @@ from __future__ import unicode_literals, absolute_import
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 import ipdb
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from allauth.exceptions import ImmediateHttpResponse
 
 
@@ -45,16 +45,28 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
         return su
 
     def get_connect_redirect_url(self, request, socialaccount):
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
         result = super(PympaSocialAccountAdapter,
                        self).get_connect_redirect_url(request, socialaccount)
         return result
 
     def pre_social_login(self, request, sociallogin):
-        import ipdb
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
+        from django.contrib.auth.models import User
+        try:
+            print("************************************")
+            print("#####", sociallogin.is_existing)
+            if not sociallogin.is_existing:
+                sociallogin.account.user = User.objects.get(
+                    username=sociallogin.account.user.username)
+                sociallogin.save(request)
+        except User.DoesNotExist:
+            pass
         # raise ImmediateHttpResponse(HttpResponse('Closed for the day'))
+        # raise ImmediateHttpResponse(HttpResponseRedirect('/pippo/'))
+
 
 
 

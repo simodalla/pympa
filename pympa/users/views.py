@@ -55,3 +55,9 @@ from django.core.urlresolvers import reverse
 #     # These next two lines tell the view to index lookups by username
 #     slug_field = "username"
 #     slug_url_kwarg = "username"
+
+from django.http import HttpResponse
+
+
+def pippo(request):
+    return HttpResponse("Hello, world. You're at the polls index.")

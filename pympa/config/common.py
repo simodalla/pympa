@@ -133,8 +133,8 @@ class Common(Configuration):
     TIME_ZONE = 'Europe/Rome'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-    # LANGUAGE_CODE = 'it-it'
-    LANGUAGE_CODE = 'en'
+    LANGUAGE_CODE = 'it-it'
+    # LANGUAGE_CODE = 'en'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
     SITE_ID = 1
@@ -259,7 +259,6 @@ class Common(Configuration):
     # AUTHENTICATION CONFIGURATION
     AUTHENTICATION_BACKENDS = (
         "django.contrib.auth.backends.ModelBackend",
-        # "users.auth_backends.PympaBackend",
         "allauth.account.auth_backends.AuthenticationBackend",
     )
     #
