@@ -2,6 +2,10 @@
 from __future__ import unicode_literals, absolute_import
 
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.account.adapter import DefaultAccountAdapter
+import ipdb
+from django.http import HttpResponse
+from allauth.exceptions import ImmediateHttpResponse
 
 
 class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -15,6 +19,8 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
             request, sociallogin, data)
         p.username = data.get('email').split('@')[0]
         print(type(p), p)
+        # import ipdb
+        # ipdb.set_trace()
         print("end populate_user")
         return p
 
@@ -24,6 +30,8 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
                                                              sociallogin)
         print(type(nu), nu)
         print("end new_user")
+        # import ipdb
+        # ipdb.set_trace()
         return nu
 
     def save_user(self, request, sociallogin, form=None):
@@ -35,3 +43,35 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
         # ipdb.set_trace()
         print("end save_user")
         return su
+
+    def get_connect_redirect_url(self, request, socialaccount):
+        import ipdb
+        ipdb.set_trace()
+        result = super(PympaSocialAccountAdapter,
+                       self).get_connect_redirect_url(request, socialaccount)
+        return result
+
+    def pre_social_login(self, request, sociallogin):
+        import ipdb
+        ipdb.set_trace()
+        # raise ImmediateHttpResponse(HttpResponse('Closed for the day'))
+
+
+
+# class PympaAccountAdapter(DefaultAccountAdapter):
+#
+#     def new_user(self, request):
+#         print("start PympaAccountAdapter new_user")
+#         n_u = super(PympaAccountAdapter, self).new_user(request)
+#         print(n_u)
+#         print("stop PympaAccountAdapter new_user")
+#         return n_u
+#
+#     def save_user(self, request, user, form, commit=True):
+#         print("start PympaAccountAdapter save_user")
+#         s_u = super(PympaAccountAdapter, self).save_user(
+#             request, user, form, commit=commit)
+#         print(s_u)
+#         print("stop PympaAccountAdapter save_user")
+#         return s_u
+        

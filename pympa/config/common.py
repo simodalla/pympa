@@ -49,7 +49,7 @@ class Common(Configuration):
 
     # Apps specific for this project go here.
     LOCAL_APPS = (
-        # 'users',  # custom users app
+        'users',  # custom users app
         # # Your stuff: custom apps go here
     )
 
@@ -133,7 +133,8 @@ class Common(Configuration):
     TIME_ZONE = 'Europe/Rome'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-    LANGUAGE_CODE = 'it-it'
+    # LANGUAGE_CODE = 'it-it'
+    LANGUAGE_CODE = 'en'
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
     SITE_ID = 1
@@ -258,18 +259,21 @@ class Common(Configuration):
     # AUTHENTICATION CONFIGURATION
     AUTHENTICATION_BACKENDS = (
         "django.contrib.auth.backends.ModelBackend",
+        # "users.auth_backends.PympaBackend",
         "allauth.account.auth_backends.AuthenticationBackend",
     )
     #
     # # Some really nice defaults
-    ACCOUNT_AUTHENTICATION_METHOD = "email"
+    # ACCOUNT_AUTHENTICATION_METHOD = "email"
+    # ACCOUNT_AUTHENTICATION_METHOD = "email"
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     # # END AUTHENTICATION CONFIGURATION
     #
     # # Custom user app defaults
     # # Select the correct user model
-    AUTH_USER_MODEL = "auth.User"
+    # AUTH_USER_MODEL = "users.EmailUser"
+    # AUTH_USER_MODEL = "users.PympaUser"
     LOGIN_REDIRECT_URL = '/'
     # LOGIN_URL = "account_login"
     # LOGIN_REDIRECT_URL = "users:redirect"

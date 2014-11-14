@@ -22,8 +22,8 @@ class Local(Common):
     # END INSTALLED_APPS
 
     # Mail settings
-    EMAIL_HOST = "localhost"
-    EMAIL_PORT = 1025
+    EMAIL_HOST = "smtp-relay.gmail.com"
+    EMAIL_PORT = 465
     EMAIL_BACKEND = values.Value('django.core.mail.backends.console.EmailBackend')
     # End mail settings
 
