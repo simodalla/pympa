@@ -51,6 +51,8 @@ class Common(Configuration):
     LOCAL_APPS = (
         'users',  # custom users app
         # # Your stuff: custom apps go here
+        'pympa_core',
+        'pympa_affarigenerali',
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -114,7 +116,7 @@ class Common(Configuration):
 
     # DATABASE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-    DATABASES = values.DatabaseURLValue('postgres://localhost/pympa')
+    DATABASES = values.DatabaseURLValue('postgres://localhost/pympa7')
     # END DATABASE CONFIGURATION
 
     # # CACHING
