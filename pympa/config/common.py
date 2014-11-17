@@ -50,7 +50,7 @@ class Common(Configuration):
     # Apps specific for this project go here.
     LOCAL_APPS = (
         'users',  # custom users app
-        # # Your stuff: custom apps go here
+        # Your stuff: custom apps go here
         'pympa_core',
         'pympa_affarigenerali',
     )
@@ -119,16 +119,16 @@ class Common(Configuration):
     DATABASES = values.DatabaseURLValue('postgres://localhost/pympa7')
     # END DATABASE CONFIGURATION
 
-    # # CACHING
-    # # Do this here because thanks to django-pylibmc-sasl and pylibmc
-    # # memcacheify (used on heroku) is painful to install on windows.
+    # CACHING
+    # Do this here because thanks to django-pylibmc-sasl and pylibmc
+    # memcacheify (used on heroku) is painful to install on windows.
     # CACHES = {
     #     'default': {
     #         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     #         'LOCATION': ''
     #     }
     # }
-    # # END CACHING
+    # END CACHING
 
     # GENERAL CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
@@ -217,9 +217,9 @@ class Common(Configuration):
     WSGI_APPLICATION = 'wsgi.application'
     # End URL Configuration
 
-    # # SLUGLIFIER
+    # SLUGLIFIER
     # AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
-    # # END SLUGLIFIER
+    # END SLUGLIFIER
 
     # LOGGING CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging
@@ -263,26 +263,17 @@ class Common(Configuration):
         "django.contrib.auth.backends.ModelBackend",
         "allauth.account.auth_backends.AuthenticationBackend",
     )
-    #
-    # # Some really nice defaults
-    # ACCOUNT_AUTHENTICATION_METHOD = "email"
-    # ACCOUNT_AUTHENTICATION_METHOD = "email"
+    # Some really nice defaults
+    ACCOUNT_AUTHENTICATION_METHOD = "username"
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-    # # END AUTHENTICATION CONFIGURATION
-    #
-    # # Custom user app defaults
-    # # Select the correct user model
-    # AUTH_USER_MODEL = "users.EmailUser"
-    # AUTH_USER_MODEL = "users.PympaUser"
-    LOGIN_REDIRECT_URL = '/'
-    # LOGIN_URL = "account_login"
-    # LOGIN_REDIRECT_URL = "users:redirect"
-    # LOGIN_URL = "account_login"
-    # # END Custom user app defaults
 
-    # ACCOUNT_AUTHENTICATION_METHOD = 'email'
-    # ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
+    #  Custom user app defaults
+    LOGIN_REDIRECT_URL = '/'
+    LOGIN_URL = "/admin/"
+    # END Custom user app defaults
+
+    ACCOUNT_ADAPTER = "users.providers.PympaAccountAdapter"
     SOCIALACCOUNT_ADAPTER = "users.providers.PympaSocialAccountAdapter"
     SOCIALACCOUNT_QUERY_EMAIL = True
     SOCIALACCOUNT_PROVIDERS = {
@@ -290,3 +281,4 @@ class Common(Configuration):
             'SCOPE': ['profile', 'email'],
             'AUTH_PARAMS': {'access_type': 'online'}}
     }
+    # END AUTHENTICATION CONFIGURATION

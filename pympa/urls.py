@@ -12,7 +12,6 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^pippo/$', 'users.views.pippo', name='pippo'),
     url(r'^$',  # noqa
         TemplateView.as_view(template_name='pages/home.html'),
         name="home"),
@@ -25,7 +24,7 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
 
     # User management
-    # url(r'^users/', include("users.urls", namespace="users")),
+    url(r'^accounts/', include("users.urls", namespace="users")),
     url(r'^accounts/', include('allauth.urls')),
 
     # Uncomment the next line to enable avatars

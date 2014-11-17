@@ -70,20 +70,23 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
 
 
 
-# class PympaAccountAdapter(DefaultAccountAdapter):
-#
-#     def new_user(self, request):
-#         print("start PympaAccountAdapter new_user")
-#         n_u = super(PympaAccountAdapter, self).new_user(request)
-#         print(n_u)
-#         print("stop PympaAccountAdapter new_user")
-#         return n_u
-#
-#     def save_user(self, request, user, form, commit=True):
-#         print("start PympaAccountAdapter save_user")
-#         s_u = super(PympaAccountAdapter, self).save_user(
-#             request, user, form, commit=commit)
-#         print(s_u)
-#         print("stop PympaAccountAdapter save_user")
-#         return s_u
+class PympaAccountAdapter(DefaultAccountAdapter):
+
+    def is_open_for_signup(self, request):
+        return False
+
+    # def new_user(self, request):
+    #     print("start PympaAccountAdapter new_user")
+    #     n_u = super(PympaAccountAdapter, self).new_user(request)
+    #     print(n_u)
+    #     print("stop PympaAccountAdapter new_user")
+    #     return n_u
+    #
+    # def save_user(self, request, user, form, commit=True):
+    #     print("start PympaAccountAdapter save_user")
+    #     s_u = super(PympaAccountAdapter, self).save_user(
+    #         request, user, form, commit=commit)
+    #     print(s_u)
+    #     print("stop PympaAccountAdapter save_user")
+    #     return s_u
         
