@@ -24,12 +24,14 @@ class Local(Common):
     # Mail settings
     EMAIL_HOST = "smtp-relay.gmail.com"
     EMAIL_PORT = 465
-    EMAIL_BACKEND = values.Value('django.core.mail.backends.console.EmailBackend')
+    EMAIL_BACKEND = values.Value(
+        'django.core.mail.backends.console.EmailBackend')
     # End mail settings
 
     # django-debug-toolbar
-    # MIDDLEWARE_CLASSES = Common.MIDDLEWARE_CLASSES + ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-    # INSTALLED_APPS += ('debug_toolbar',)
+    MIDDLEWARE_CLASSES = Common.MIDDLEWARE_CLASSES + (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',)
+    INSTALLED_APPS += ('debug_toolbar',)
 
     INTERNAL_IPS = ('127.0.0.1',)
 
