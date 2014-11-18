@@ -7,5 +7,5 @@ from . import views
 
 urlpatterns = patterns(
     '',
-    # url(r'^login/$', RedirectView.as_view(url='/admin/'), name='login'),
+    url(r'^login/$', RedirectView.as_view(url='/admin/'), name='login'),
 )
