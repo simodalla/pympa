@@ -4,13 +4,24 @@ from django.views.generic import RedirectView
 from django.core.urlresolvers import reverse
 
 
-class LoginRedirectView(RedirectView):
+class AccountsLoginRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('admin:index')
 
 
-class LogoutRedirectView(RedirectView):
+class AccountsLogoutRedirectView(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse('admin:logout')
+
+
+class AccountsPasswordChangeView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('admin:password_change')
+
+
+class AccountsInactiveRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('admin:index')
+
