@@ -25,3 +25,7 @@ class AccountsInactiveRedirectView(RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return reverse('admin:index')
 
+
+class AdminPasswordResetRedirectView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse('account_reset_password')

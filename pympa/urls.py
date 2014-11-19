@@ -9,10 +9,15 @@ from django.views.generic.base import RedirectView
 from django.contrib import admin
 admin.autodiscover()
 
+from users import views
+
 urlpatterns = patterns(
     '',
     url(r'^$',  # noqa
         RedirectView.as_view(url='/admin/'), name='home'),
+    url(r'^password_reset/$',
+        views.AdminPasswordResetRedirectView.as_view(),
+        name='admin_password_reset'),
 
     # admin
     url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
