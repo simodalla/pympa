@@ -256,6 +256,11 @@ class Common(Configuration):
 
     # Your common stuff: Below this line define 3rd party library settings
 
+    # ADMIN SITE CONFIGURATION
+    ADMIN_SITE_HEADER = 'PymPA'
+    ADMIN_SITE_TITLE = 'PymPA'
+    ADMIN_INDEX_TITLE = 'Gestisci i tuoi moduli di PymPA'
+
     # GRAPELLI CONFIGURATION
     GRAPPELLI_ADMIN_TITLE = "PymPA"
 
