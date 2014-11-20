@@ -35,7 +35,7 @@ class Common(Configuration):
     )
     ADMIN_APPS = (
         # Admin
-        'grappelli',
+        # 'grappelli',
         'django.contrib.admin',
     )
     THIRD_PARTY_APPS = (
@@ -167,6 +167,7 @@ class Common(Configuration):
         # Your stuff: custom template context processers go here
         "allauth.account.context_processors.account",
         "allauth.socialaccount.context_processors.socialaccount",
+        'pympa_core.context_processors.admin_interface'
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
