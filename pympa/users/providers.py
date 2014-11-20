@@ -9,58 +9,59 @@ from allauth.exceptions import ImmediateHttpResponse
 
 
 class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
-    def populate_user(self,
-                      request,
-                      sociallogin,
-                      data):
-        print("start populate_user")
-        print(sociallogin, data)
-        p = super(PympaSocialAccountAdapter, self).populate_user(
-            request, sociallogin, data)
-        p.username = data.get('email').split('@')[0]
-        print(type(p), p)
-        # import ipdb
-        # ipdb.set_trace()
-        print("end populate_user")
-        return p
-
-    def new_user(self, request, sociallogin):
-        print("start new_user")
-        nu = super(PympaSocialAccountAdapter, self).new_user(request,
-                                                             sociallogin)
-        print(type(nu), nu)
-        print("end new_user")
-        # import ipdb
-        # ipdb.set_trace()
-        return nu
-
-    def save_user(self, request, sociallogin, form=None):
-        print("start save_user")
-        su = super(PympaSocialAccountAdapter, self).save_user(
-            request, sociallogin, form=form)
-        print(type(su), su)
-        # import ipdb
-        # ipdb.set_trace()
-        print("end save_user")
-        return su
-
-    def get_connect_redirect_url(self, request, socialaccount):
-        # import ipdb
-        # ipdb.set_trace()
-        result = super(PympaSocialAccountAdapter,
-                       self).get_connect_redirect_url(request, socialaccount)
-        return result
+    # def populate_user(self,
+    #                   request,
+    #                   sociallogin,
+    #                   data):
+    #     print("start populate_user")
+    #     print(sociallogin, data)
+    #     p = super(PympaSocialAccountAdapter, self).populate_user(
+    #         request, sociallogin, data)
+    #     p.username = data.get('email').split('@')[0]
+    #     print(type(p), p)
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     print("end populate_user")
+    #     return p
+    #
+    # def new_user(self, request, sociallogin):
+    #     print("start new_user")
+    #     nu = super(PympaSocialAccountAdapter, self).new_user(request,
+    #                                                          sociallogin)
+    #     print(type(nu), nu)
+    #     print("end new_user")
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     return nu
+    #
+    # def save_user(self, request, sociallogin, form=None):
+    #     print("start save_user")
+    #     su = super(PympaSocialAccountAdapter, self).save_user(
+    #         request, sociallogin, form=form)
+    #     print(type(su), su)
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     print("end save_user")
+    #     return su
+    #
+    # def get_connect_redirect_url(self, request, socialaccount):
+    #     # import ipdb
+    #     # ipdb.set_trace()
+    #     result = super(PympaSocialAccountAdapter,
+    #                    self).get_connect_redirect_url(request, socialaccount)
+    #     return result
 
     def pre_social_login(self, request, sociallogin):
         # import ipdb
         # ipdb.set_trace()
-        from django.contrib.auth.models import User
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
         try:
             print("************************************")
             print("#####", sociallogin.is_existing)
             if not sociallogin.is_existing:
                 sociallogin.account.user = User.objects.get(
-                    username=sociallogin.account.user.username)
+                    email=sociallogin.account.user.email)
                 sociallogin.save(request)
         except User.DoesNotExist:
             pass
@@ -73,7 +74,8 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
 class PympaAccountAdapter(DefaultAccountAdapter):
 
     def is_open_for_signup(self, request):
-        return False
+        # return False
+        return True
 
     # def new_user(self, request):
     #     print("start PympaAccountAdapter new_user")

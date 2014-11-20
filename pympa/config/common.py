@@ -35,7 +35,7 @@ class Common(Configuration):
     )
     ADMIN_APPS = (
         # Admin
-        # 'grappelli',
+        'grappelli',
         'django.contrib.admin',
     )
     THIRD_PARTY_APPS = (
@@ -262,24 +262,26 @@ class Common(Configuration):
     ADMIN_INDEX_TITLE = 'Gestisci i tuoi moduli di PymPA'
 
     # GRAPELLI CONFIGURATION
-    GRAPPELLI_ADMIN_TITLE = "PymPA"
+    GRAPPELLI_ADMIN_TITLE = ADMIN_SITE_HEADER
 
     # AUTHENTICATION CONFIGURATION
+    AUTH_USER_MODEL = 'users.PympaUser'
     AUTHENTICATION_BACKENDS = (
         "django.contrib.auth.backends.ModelBackend",
         "allauth.account.auth_backends.AuthenticationBackend",
     )
     # Some really nice defaults
-    ACCOUNT_AUTHENTICATION_METHOD = "username"
+    ACCOUNT_AUTHENTICATION_METHOD = "email"
     ACCOUNT_EMAIL_REQUIRED = True
     ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
 
     #  Custom user app defaults
     LOGIN_REDIRECT_URL = '/'
     LOGIN_URL = "/admin/"
     # END Custom user app defaults
 
-    ACCOUNT_ADAPTER = "users.providers.PympaAccountAdapter"
+    # ACCOUNT_ADAPTER = "users.providers.PympaAccountAdapter"
     SOCIALACCOUNT_ADAPTER = "users.providers.PympaSocialAccountAdapter"
     SOCIALACCOUNT_QUERY_EMAIL = True
     SOCIALACCOUNT_PROVIDERS = {

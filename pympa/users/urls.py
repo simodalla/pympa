@@ -7,8 +7,8 @@ from . import views
 
 urlpatterns = patterns(
     '',
-    url(r'^login/$',  views.AccountsLoginRedirectView.as_view()),
-    url(r'^logout/$', views.AccountsLogoutRedirectView.as_view()),
-    url(r'^password/change/$', views.AccountsPasswordChangeView.as_view()),
-    url(r"^inactive/$", views.AccountsInactiveRedirectView.as_view()),
+    # url(r'^login/$',  views.AccountsLoginRedirectView.as_view()),
+    # url(r'^logout/$', views.AccountsLogoutRedirectView.as_view()),
+    # url(r'^password/change/$', views.AccountsPasswordChangeView.as_view()),
+    # url(r"^inactive/$", views.AccountsInactiveRedirectView.as_view()),
 )
