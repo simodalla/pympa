@@ -44,3 +44,10 @@ class Local(Common):
     # end django-debug-toolbar
 
     # Your local stuff: Below this line define 3rd party libary settings
+
+    TEST_GOOGLE_USER_USERNAME = values.SecretValue()
+    TEST_GOOGLE_USER_PASSWORD = values.SecretValue()
+    TEST_GOOGLE_USER_LAST_NAME = 'demo_djangogoogleapps'
+    TEST_GOOGLE_USER_FIRST_NAME = 'demo_djangogoogleapps'
+    TEST_GOOGLE_CLIENT_ID = values.SecretValue()
+    TEST_GOOGLE_CLIENT_SECRET = values.SecretValue()

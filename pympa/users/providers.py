@@ -9,40 +9,34 @@ from allauth.exceptions import ImmediateHttpResponse
 
 
 class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
-    # def populate_user(self,
-    #                   request,
-    #                   sociallogin,
-    #                   data):
-    #     print("start populate_user")
-    #     print(sociallogin, data)
-    #     p = super(PympaSocialAccountAdapter, self).populate_user(
-    #         request, sociallogin, data)
-    #     p.username = data.get('email').split('@')[0]
-    #     print(type(p), p)
-    #     # import ipdb
-    #     # ipdb.set_trace()
-    #     print("end populate_user")
-    #     return p
-    #
-    # def new_user(self, request, sociallogin):
-    #     print("start new_user")
-    #     nu = super(PympaSocialAccountAdapter, self).new_user(request,
-    #                                                          sociallogin)
-    #     print(type(nu), nu)
-    #     print("end new_user")
-    #     # import ipdb
-    #     # ipdb.set_trace()
-    #     return nu
-    #
-    # def save_user(self, request, sociallogin, form=None):
-    #     print("start save_user")
-    #     su = super(PympaSocialAccountAdapter, self).save_user(
-    #         request, sociallogin, form=form)
-    #     print(type(su), su)
-    #     # import ipdb
-    #     # ipdb.set_trace()
-    #     print("end save_user")
-    #     return su
+    def populate_user(self,
+                      request,
+                      sociallogin,
+                      data):
+        print("start populate_user")
+        print(sociallogin, data)
+        p = super(PympaSocialAccountAdapter, self).populate_user(
+            request, sociallogin, data)
+        p.username = data.get('email').split('@')[0]
+        print(type(p), p)
+        print("end populate_user")
+        return p
+
+    def new_user(self, request, sociallogin):
+        print("start new_user")
+        nu = super(PympaSocialAccountAdapter, self).new_user(request,
+                                                             sociallogin)
+        print(type(nu), nu)
+        print("end new_user")
+        return nu
+
+    def save_user(self, request, sociallogin, form=None):
+        print("start save_user")
+        su = super(PympaSocialAccountAdapter, self).save_user(
+            request, sociallogin, form=form)
+        print(type(su), su)
+        print("end save_user")
+        return su
     #
     # def get_connect_redirect_url(self, request, socialaccount):
     #     # import ipdb
@@ -63,6 +57,8 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
                 sociallogin.account.user = User.objects.get(
                     email=sociallogin.account.user.email)
                 sociallogin.save(request)
+                import ipdb
+                ipdb.set_trace()
         except User.DoesNotExist:
             pass
         # raise ImmediateHttpResponse(HttpResponse('Closed for the day'))
