@@ -5,8 +5,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core import mail
 from django.core.urlresolvers import reverse
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
@@ -17,6 +18,7 @@ from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.models import SocialAccount
 
 User = get_user_model()
+ADMINS = (('admin', 'admin@example.org'),)
 
 
 class AccountsTests(TestCase):
@@ -68,6 +70,7 @@ def make_google_login(driver, url, username=None, password=None):
     element.click()
 
 
+@override_settings(ADMINS=ADMINS)
 class AccountsLiveTests(StaticLiveServerTestCase):
 
     def setUp(self):
@@ -103,6 +106,11 @@ class AccountsLiveTests(StaticLiveServerTestCase):
         user = social_account[0].user
         self.assertEqual(user.last_name, settings.TEST_GOOGLE_USER_LAST_NAME)
         self.assertEqual(user.first_name, settings.TEST_GOOGLE_USER_FIRST_NAME)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [ADMINS[0][1]])
+        self.assertIn(mail.outbox[0].subject,
+                      'Nuovo socialaccount di {}'.format(
+                          settings.TEST_GOOGLE_USER_USERNAME))
 
     def test_google_login_update_local_user_if_user_exist(self):
         user = User.objects.create_user(settings.TEST_GOOGLE_USER_USERNAME)
