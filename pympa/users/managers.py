@@ -2,7 +2,10 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.contrib.auth.models import BaseUserManager
+from django.core.mail import mail_admins
+from django.template import loader, Context
 from django.utils import timezone
+from django.utils.html import strip_tags
 
 
 class PympaUserManager(BaseUserManager):
@@ -31,3 +34,17 @@ class PympaUserManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         return self._create_user(email, password, True, True,
                                  **extra_fields)
+
+    def email_new_sociallogin(self, request, sociallogin):
+        user = sociallogin.account.user
+        """:type : users.models.PympaUser"""
+        context = {'email': user.email,
+                   'user_url': request.build_absolute_uri(
+                       user.get_absolute_url())}
+        subject = 'Nuovo socialaccount di {}'.format(user.email)
+        message = loader.get_template(
+            "users/email/new_social_account.html").render(Context(context))
+        mail_admins(subject,
+                    strip_tags(message).lstrip('\n'),
+                    fail_silently=True,
+                    html_message=message)
