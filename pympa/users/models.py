@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from django.utils.encoding import python_2_unicode_compatible
@@ -39,7 +40,11 @@ class PympaUser(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _('users')
 
     def get_absolute_url(self):
-        return "admin/users/%s/".format(self.pk)
+        url = reverse('admin:users_pympauser_change', args=(self.pk,))
+        if not self.pk and self.email:
+            url = '{}?email={}'.format(
+                reverse('admin:users_pympauser_changelist'), self.email)
+        return url
 
     def get_full_name(self):
         """
@@ -62,3 +67,19 @@ class PympaUser(AbstractBaseUser, PermissionsMixin):
         Sends an email to this User.
         """
         send_mail(subject, message, from_email, [self.email])
+
+    def copy_fields(self, source_user, fields=None):
+        """
+        Update fields from list param 'fields' of current User from User
+        'source_user'.
+        """
+        fields = fields or []
+        update = False
+        for field in fields:
+            social_field = getattr(source_user, field)
+            if not (getattr(self, field) == social_field):
+                setattr(self, field, social_field)
+                update = True
+        if update:
+            self.save()
+        return update
