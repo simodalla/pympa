@@ -21,7 +21,7 @@ User = get_user_model()
 ADMINS = (('admin', 'admin@example.org'),)
 
 
-class AccountsTests(TestCase):
+class PympaUsersTests(TestCase):
 
     def setUp(self):
         self.username = 'admin@example.com'
@@ -71,7 +71,7 @@ def make_google_login(driver, url, username=None, password=None):
 
 
 @override_settings(ADMINS=ADMINS)
-class AccountsLiveTests(StaticLiveServerTestCase):
+class PympaUsersLiveTests(StaticLiveServerTestCase):
 
     def setUp(self):
         google = SocialApp()
@@ -81,20 +81,11 @@ class AccountsLiveTests(StaticLiveServerTestCase):
         google.secret = settings.TEST_GOOGLE_CLIENT_SECRET
         google.save()
         google.sites.add(Site.objects.get(pk=settings.SITE_ID))
+        self.driver = WebDriver()
+        self.driver.implicitly_wait(10)
 
-    @classmethod
-    def setUpClass(cls):
-        cls.driver = WebDriver()
-        cls.driver.implicitly_wait(10)
-        super(AccountsLiveTests, cls).setUpClass()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
-        super(AccountsLiveTests, cls).tearDownClass()
-
-    # def test_signup(self):
-    #     self.driver.get(self.live_server_url + '/accounts/signup/')
+    def tearDown(self):
+        self.driver.quit()
 
     def test_google_login_create_local_user_if_user_not_exist(self):
         make_google_login(self.driver,
@@ -108,9 +99,10 @@ class AccountsLiveTests(StaticLiveServerTestCase):
         self.assertEqual(user.first_name, settings.TEST_GOOGLE_USER_FIRST_NAME)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, [ADMINS[0][1]])
-        self.assertIn(mail.outbox[0].subject,
-                      'Nuovo socialaccount di {}'.format(
-                          settings.TEST_GOOGLE_USER_USERNAME))
+        self.assertIn(
+            'Nuovo socialaccount di {}'.format(
+                settings.TEST_GOOGLE_USER_USERNAME),
+            mail.outbox[0].subject,)
 
     def test_google_login_update_local_user_if_user_exist(self):
         user = User.objects.create_user(settings.TEST_GOOGLE_USER_USERNAME)
@@ -126,3 +118,9 @@ class AccountsLiveTests(StaticLiveServerTestCase):
                          settings.TEST_GOOGLE_USER_LAST_NAME)
         self.assertEqual(related_user.first_name,
                          settings.TEST_GOOGLE_USER_FIRST_NAME)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [ADMINS[0][1]])
+        self.assertIn(
+            'Collegamento socialaccount di {}'.format(
+                settings.TEST_GOOGLE_USER_USERNAME),
+            mail.outbox[0].subject)
