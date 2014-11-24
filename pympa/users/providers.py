@@ -2,10 +2,14 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.contrib.auth import get_user_model
-
-
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.adapter import DefaultAccountAdapter
+from allauth.exceptions import ImmediateHttpResponse
+
+from .models import LogUnauthorizedLogin
+
 
 User = get_user_model()
 """:type : users.models.PympaUser"""
@@ -13,20 +17,44 @@ User = get_user_model()
 
 class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
 
-    def pre_social_login(self, request, sociallogin):
+    def _response_user_is_denied_or_inactive(self, sociallogin, reason=None):
         try:
-            if not sociallogin.is_existing:
-                local_user = User.objects.get(
-                    email=sociallogin.account.user.email)
+            LogUnauthorizedLogin.objects.create(
+                username=sociallogin.account.user.email, reason=reason)
+        except Exception:
+            pass
+        return ImmediateHttpResponse(redirect(
+            reverse('users:unauthorized_login')))
+
+    def pre_social_login(self, request, sociallogin):
+        email = sociallogin.account.user.email
+        authorized_user = sociallogin.account.user.authorized_user
+        if authorized_user:
+            if authorized_user.is_denied:
+                # login of user denied
+                raise self._response_user_is_denied_or_inactive(sociallogin,
+                                                                'deny')
+        else:
+            # login of domain not authorized
+            if not sociallogin.account.user.is_in_authorized_domain():
+                raise self._response_user_is_denied_or_inactive(sociallogin,
+                                                                'domain')
+        try:
+            local_user = User.objects.get(email=email)
+            if not local_user.is_active:
+                # login of user not active
+                raise self._response_user_is_denied_or_inactive(sociallogin,
+                                                                'notactive')
+            if not sociallogin.is_existing:  # sociallogin not exist
                 local_user.copy_fields(sociallogin.account.user,
                                        ['last_name', 'first_name'])
                 sociallogin.account.user = local_user
                 sociallogin.save(request)
+                User.objects.email_link_sociallogin(request, sociallogin)
+            else:  # sociallogin is already existing
+                pass
         except User.DoesNotExist:
             User.objects.email_new_sociallogin(request, sociallogin)
-
-        # raise ImmediateHttpResponse(HttpResponse('Closed for the day'))
-        # raise ImmediateHttpResponse(HttpResponseRedirect('/pippo/'))
 
 
 class PympaAccountAdapter(DefaultAccountAdapter):

@@ -83,3 +83,62 @@ class PympaUser(AbstractBaseUser, PermissionsMixin):
         if update:
             self.save()
         return update
+
+    @property
+    def authorized_user(self):
+        try:
+            return AuthorizedUser.objects.get(email=self.email)
+        except AuthorizedUser.DoesNotExist:
+            return None
+
+    def is_in_authorized_domain(self):
+        if not self.email or '@' not in self.email:
+            return False
+        domain = self.email.split('@')[1]
+        try:
+            AuthorizedDomain.objects.get(domain=domain)
+            return True
+        except AuthorizedDomain.DoesNotExist:
+            return False
+
+
+class AuthorizedDomain(models.Model):
+    domain = models.CharField(_('domain'), max_length=254, unique=True)
+
+    class Meta:
+        verbose_name = _('authorized domain')
+        verbose_name_plural = _('authorized domains')
+
+
+class AuthorizedUser(models.Model):
+    email = models.EmailField(_('email address'), max_length=254, unique=True)
+    is_staff = models.BooleanField(_('staff status'), default=False,
+        help_text=_('Designates whether the user can log into this admin '
+                    'site.'))
+    is_superuser = models.BooleanField(_('superuser status'), default=False,
+        help_text=_('Designates that this user has all permissions without '
+                    'explicitly assigning them.'))
+    is_denied = models.BooleanField(_('deny status'), default=False,
+        help_text=_('Designates that this user is denied to login.'))
+
+    class Meta:
+        verbose_name = _('authorized user')
+        verbose_name_plural = _('authorized users')
+
+
+UNAUTHORIZED_REASONS = (
+    ('domain', _('Domain Unauthorized')),
+    ('notactive', _('User Not Active')),
+    ('deny', _('User Denied')),
+)
+
+
+class LogUnauthorizedLogin(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    username = models.CharField(max_length=254)
+    reason = models.CharField(max_length=254, choices=UNAUTHORIZED_REASONS,
+                              null=True)
+
+    class Meta:
+        verbose_name = _('log unauthorized login')
+        verbose_name_plural = _('log unauthorized logins')

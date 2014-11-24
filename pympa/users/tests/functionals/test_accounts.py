@@ -8,14 +8,15 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase, override_settings
-
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-
 from allauth.socialaccount.models import SocialApp
 from allauth.socialaccount.models import SocialAccount
+
+from ...models import AuthorizedUser, AuthorizedDomain
+
 
 User = get_user_model()
 ADMINS = (('admin', 'admin@example.org'),)
@@ -81,8 +82,11 @@ class PympaUsersLiveTests(StaticLiveServerTestCase):
         google.secret = settings.TEST_GOOGLE_CLIENT_SECRET
         google.save()
         google.sites.add(Site.objects.get(pk=settings.SITE_ID))
+
+        self.email = settings.TEST_GOOGLE_USER_USERNAME
         self.driver = WebDriver()
         self.driver.implicitly_wait(10)
+        AuthorizedDomain.objects.create(domain=self.email.split('@')[1])
 
     def tearDown(self):
         self.driver.quit()
@@ -91,8 +95,7 @@ class PympaUsersLiveTests(StaticLiveServerTestCase):
         make_google_login(self.driver,
                           '{}/accounts/google/login/?next=/admin/'
                           '&process=login'.format(self.live_server_url))
-        social_account = SocialAccount.objects.filter(
-            user__email=settings.TEST_GOOGLE_USER_USERNAME)
+        social_account = SocialAccount.objects.filter(user__email=self.email)
         self.assertEqual(len(social_account), 1)
         user = social_account[0].user
         self.assertEqual(user.last_name, settings.TEST_GOOGLE_USER_LAST_NAME)
@@ -105,7 +108,7 @@ class PympaUsersLiveTests(StaticLiveServerTestCase):
             mail.outbox[0].subject,)
 
     def test_google_login_update_local_user_if_user_exist(self):
-        user = User.objects.create_user(settings.TEST_GOOGLE_USER_USERNAME)
+        user = User.objects.create_user(self.email)
         make_google_login(self.driver,
                           '{}/accounts/google/login/?next=/admin/'
                           '&process=login'.format(self.live_server_url))
@@ -124,3 +127,49 @@ class PympaUsersLiveTests(StaticLiveServerTestCase):
             'Collegamento socialaccount di {}'.format(
                 settings.TEST_GOOGLE_USER_USERNAME),
             mail.outbox[0].subject)
+
+    def test_google_login_fail_because_user_is_denied(self):
+        for model in [User, SocialAccount]:
+            self.assertEqual(model.objects.count(), 0)
+        AuthorizedUser.objects.create(email=self.email, is_denied=True)
+        make_google_login(self.driver,
+                          '{}/accounts/google/login/?next=/admin/'
+                          '&process=login'.format(self.live_server_url))
+        WebDriverWait(self.driver, 10).until(
+            ec.element_to_be_clickable((By.ID, 'unauthorized_login'))
+        )
+        self.assertEqual(
+            self.driver.current_url.split(self.live_server_url)[1],
+            reverse('users:unauthorized_login'))
+        for model in [User, SocialAccount]:
+            self.assertEqual(model.objects.count(), 0)
+
+    def test_google_login_fail_because_user_is_not_active(self):
+        user = User.objects.create_user(self.email)
+        user.is_active = False
+        user.save()
+        make_google_login(self.driver,
+                          '{}/accounts/google/login/?next=/admin/'
+                          '&process=login'.format(self.live_server_url))
+        WebDriverWait(self.driver, 10).until(
+            ec.element_to_be_clickable((By.ID, 'unauthorized_login'))
+        )
+        self.assertEqual(
+            self.driver.current_url.split(self.live_server_url)[1],
+            reverse('users:unauthorized_login'))
+        for model in [SocialAccount]:
+            self.assertEqual(model.objects.count(), 0)
+
+    def test_google_login_fail_because_domain_not_in_autorized(self):
+        AuthorizedDomain.objects.all().delete()
+        make_google_login(self.driver,
+                          '{}/accounts/google/login/?next=/admin/'
+                          '&process=login'.format(self.live_server_url))
+        WebDriverWait(self.driver, 10).until(
+            ec.element_to_be_clickable((By.ID, 'unauthorized_login'))
+        )
+        self.assertEqual(
+            self.driver.current_url.split(self.live_server_url)[1],
+            reverse('users:unauthorized_login'))
+        for model in [SocialAccount]:
+            self.assertEqual(model.objects.count(), 0)
