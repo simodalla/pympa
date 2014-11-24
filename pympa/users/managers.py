@@ -35,6 +35,14 @@ class PympaUserManager(BaseUserManager):
         return self._create_user(email, password, True, True,
                                  **extra_fields)
 
+    def _email_for_sociallogin(self, subject, template, context=None):
+        context = context or {}
+        message = loader.get_template(template).render(Context(context))
+        mail_admins(subject,
+                    strip_tags(message).lstrip('\n'),
+                    fail_silently=True,
+                    html_message=message)
+
     def email_new_sociallogin(self, request, sociallogin):
         user = sociallogin.account.user
         """:type : users.models.PympaUser"""
@@ -42,9 +50,15 @@ class PympaUserManager(BaseUserManager):
                    'user_url': request.build_absolute_uri(
                        user.get_absolute_url())}
         subject = 'Nuovo socialaccount di {}'.format(user.email)
-        message = loader.get_template(
-            "users/email/new_social_account.html").render(Context(context))
-        mail_admins(subject,
-                    strip_tags(message).lstrip('\n'),
-                    fail_silently=True,
-                    html_message=message)
+        return self._email_for_sociallogin(
+            subject, "users/email/new_sociallogin.html", context)
+
+    def email_link_sociallogin(self, request, sociallogin):
+        user = sociallogin.account.user
+        """:type : users.models.PympaUser"""
+        context = {'email': user.email,
+                   'user_url': request.build_absolute_uri(
+                       user.get_absolute_url())}
+        subject = 'Collegamento socialaccount di {}'.format(user.email)
+        return self._email_for_sociallogin(
+            subject, "users/email/link_sociallogin.html", context)
