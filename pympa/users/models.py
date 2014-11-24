@@ -84,6 +84,11 @@ class PympaUser(AbstractBaseUser, PermissionsMixin):
             self.save()
         return update
 
+    def set_fields_from_authorized(self, authorized_user, fields=None):
+        fields = fields or ['is_staff', 'is_superuser']
+        for field in fields:
+            setattr(self, field, getattr(authorized_user, field, False))
+
     @property
     def authorized_user(self):
         try:

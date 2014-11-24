@@ -46,14 +46,15 @@ class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
                 raise self._response_user_is_denied_or_inactive(sociallogin,
                                                                 'notactive')
             if not sociallogin.is_existing:  # sociallogin not exist
+                local_user.set_fields_from_authorized(authorized_user)
                 local_user.copy_fields(sociallogin.account.user,
                                        ['last_name', 'first_name'])
                 sociallogin.account.user = local_user
                 sociallogin.save(request)
                 User.objects.email_link_sociallogin(request, sociallogin)
-            else:  # sociallogin is already existing
-                pass
         except User.DoesNotExist:
+            sociallogin.account.user.set_fields_from_authorized(
+                authorized_user)
             User.objects.email_new_sociallogin(request, sociallogin)
 
 
