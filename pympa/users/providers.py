@@ -17,6 +17,7 @@ User = get_user_model()
 
 class PympaSocialAccountAdapter(DefaultSocialAccountAdapter):
 
+    @staticmethod
     def _response_user_is_denied_or_inactive(self, sociallogin, reason=None):
         try:
             LogUnauthorizedLogin.objects.create(
