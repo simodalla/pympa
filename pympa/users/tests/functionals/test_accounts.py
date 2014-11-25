@@ -25,10 +25,10 @@ ADMINS = (('admin', 'admin@example.org'),)
 class PympaUsersTests(TestCase):
 
     def setUp(self):
-        self.username = 'admin@example.com'
+        self.email = 'admin@example.com'
         self.password = 'default'
         User.objects.create_superuser(
-            self.username, self.username, self.password)
+            self.email, self.password)
 
     def test_home(self):
         response = self.client.get('/', follow=True)
@@ -43,14 +43,14 @@ class PympaUsersTests(TestCase):
                              status_code=301)
 
     def test_logout_redirect_to_admin_login(self):
-        self.client.login(username=self.username, password=self.password)
+        self.client.login(username=self.email, password=self.password)
         response = self.client.get(reverse('account_logout'), follow=True)
         self.assertRedirects(response,
                              reverse('admin:logout'),
                              status_code=301)
 
     def test_password_change_redirect_to_admin_password_change(self):
-        self.client.login(username=self.username, password=self.password)
+        self.client.login(username=self.email, password=self.password)
         response = self.client.get(reverse('account_change_password'),
                                    follow=True)
         self.assertRedirects(response,
