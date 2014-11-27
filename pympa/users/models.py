@@ -33,6 +33,8 @@ class PympaUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     old_pympa_id = models.PositiveIntegerField(unique=True, blank=True,
                                                null=True)
+    old_pympa_username = models.CharField(max_length=254, blank=True,
+                                          null=True, unique=True)
 
     objects = PympaUserManager()
 
