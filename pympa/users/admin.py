@@ -2,7 +2,9 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_urls import admin_urlname
 from django.contrib.auth.admin import UserAdmin
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from .models import (PympaUser, AuthorizedDomain, AuthorizedUser,
@@ -23,18 +25,33 @@ class CustomUserAdmin(UserAdmin):
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (_('Migration data'), {'fields': ('old_pympa_id',
+                                          'old_pympa_username')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
-        ),
+            'fields': ('email', 'password1', 'password2')}),
     )
-    form = PympaUserChangeForm
     add_form = PympaUserCreationForm
-    list_display = ('email', 'first_name', 'last_name', 'is_staff')
-    search_fields = ('email', 'first_name', 'last_name')
+    form = PympaUserChangeForm
+    list_display = ('email', 'first_name', 'last_name', 'is_staff',
+                    'is_active', 'ld_groups')
+    # list_editable = ('first_name', 'last_name', 'is_staff', 'is_active')
+    list_per_page = 25
+    list_select_related = True
     ordering = ('email',)
+    search_fields = ('email', 'first_name', 'last_name')
+
+    def ld_groups(self, obj):
+        return '<br>'.join(
+            ['<a href="{}?id={}">{}</a>'.format(
+                reverse(admin_urlname(group._meta, 'changelist')),
+                group.pk,
+                group.name)
+             for group in obj.groups.order_by('name')])
+    ld_groups.allow_tags = True
+    ld_groups.short_description = _('groups')
 
 
 @admin.register(AuthorizedDomain)
