@@ -15,6 +15,7 @@ from os.path import join, dirname
 
 from configurations import Configuration, values
 
+
 BASE_DIR = dirname(dirname(__file__))
 
 
@@ -53,6 +54,7 @@ class Common(Configuration):
         # Your stuff: custom apps go here
         'pympa_core',
         'pympa_affarigenerali',
+        'pympa_registrum',
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
