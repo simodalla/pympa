@@ -198,7 +198,7 @@ class Common(Configuration):
 
     # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
     STATICFILES_DIRS = (
-        join(BASE_DIR, 'staticfiles'),
+        join(BASE_DIR, 'assets'),
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
