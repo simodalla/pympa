@@ -120,7 +120,8 @@ class Common(Configuration):
 
     # DATABASE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-    DATABASES = values.DatabaseURLValue('postgres://localhost/pympa7')
+    DATABASES = values.DatabaseURLValue('postgres://localhost/pympa7',
+                                        alias='default')
     # END DATABASE CONFIGURATION
 
     # CACHING

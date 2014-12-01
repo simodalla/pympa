@@ -8,6 +8,7 @@ Production Configurations
 - Use MEMCACHIER on Heroku
 '''
 from configurations import values
+import dj_database_url
 
 # # See: http://django-storages.readthedocs.org/en/latest/backends/amazon-S3.html#settings
 # try:
@@ -101,6 +102,13 @@ class Production(Common):
     EMAIL_USE_TLS = True
     SERVER_EMAIL = EMAIL_HOST_USER
     # END EMAIL
+
+    DATABASES = {
+        'default': dj_database_url.config(),
+        'old_version': dj_database_url.config(
+            env='DJANGO_OLD_DATABASE_URL',
+            default='postgres://localhost/pympa_old_version')
+    }
 
     # TEMPLATE CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
