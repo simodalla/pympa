@@ -93,12 +93,10 @@ class Production(Common):
     EMAIL_HOST = values.Value('smtp-relay.gmail.com')
     EMAIL_HOST_PASSWORD = values.SecretValue()
     EMAIL_HOST_USER = values.SecretValue()
-    EMAIL_PORT = values.IntegerValue(
-        587, environ_prefix="", environ_name="EMAIL_PORT")
-    EMAIL_SUBJECT_PREFIX = values.Value(
-        '[pympa] ', environ_name="EMAIL_SUBJECT_PREFIX")
+    EMAIL_PORT = values.IntegerValue(587)
+    EMAIL_SUBJECT_PREFIX = values.Value('[pympa] ')
     EMAIL_USE_TLS = True
-    SERVER_EMAIL = EMAIL_HOST_USER
+    SERVER_EMAIL = values.Value('pympa <pympa@example.com>')
     # END EMAIL
 
     DATABASES = {
