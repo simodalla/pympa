@@ -37,3 +37,6 @@ django-avatar==2.0
 pytz==2014.9
 
 # Your custom requirements go here
+-e git+https://github.com/simodalla/pympa-core.git#egg=pympa-core
+-e git+https://github.com/simodalla/pympa-affarigenerali.git#egg=pympa-affarigenerali
+-e git+https://github.com/simodalla/pympa-registrum.git#egg=pympa-registrum
