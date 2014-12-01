@@ -90,11 +90,9 @@ class Production(Common):
 
     # EMAIL
     DEFAULT_FROM_EMAIL = values.Value('pympa <noreply@example.com>')
-    EMAIL_HOST = values.Value('smtp.sendgrid.com')
-    EMAIL_HOST_PASSWORD = values.SecretValue(
-        environ_prefix="", environ_name="SENDGRID_PASSWORD")
-    EMAIL_HOST_USER = values.SecretValue(
-        environ_prefix="", environ_name="SENDGRID_USERNAME")
+    EMAIL_HOST = values.Value('smtp-relay.gmail.com')
+    EMAIL_HOST_PASSWORD = values.SecretValue()
+    EMAIL_HOST_USER = values.SecretValue()
     EMAIL_PORT = values.IntegerValue(
         587, environ_prefix="", environ_name="EMAIL_PORT")
     EMAIL_SUBJECT_PREFIX = values.Value(
