@@ -21,6 +21,8 @@ BASE_DIR = dirname(dirname(__file__))
 
 class Common(Configuration):
 
+    SITE_PREFIX = 'pympa'
+
     # APP CONFIGURATION
     DJANGO_APPS = (
         # Default Django apps:
@@ -191,7 +193,7 @@ class Common(Configuration):
     STATIC_ROOT = join(os.path.dirname(BASE_DIR), 'staticfiles')
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-    STATIC_URL = '/static/'
+    STATIC_URL = '/{}/static/'.format(SITE_PREFIX)
 
     # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
     STATICFILES_DIRS = (
@@ -210,7 +212,7 @@ class Common(Configuration):
     MEDIA_ROOT = join(BASE_DIR, 'media')
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-    MEDIA_URL = '/media/'
+    MEDIA_URL = '/{}/media/'.format(SITE_PREFIX)
     # END MEDIA CONFIGURATION
 
     # URL Configuration
@@ -280,7 +282,7 @@ class Common(Configuration):
 
     #  Custom user app defaults
     LOGIN_REDIRECT_URL = '/'
-    LOGIN_URL = "/admin/"
+    LOGIN_URL = '/{}/admin/'.format(SITE_PREFIX)
     # END Custom user app defaults
 
     # ACCOUNT_ADAPTER = "users.providers.PympaAccountAdapter"

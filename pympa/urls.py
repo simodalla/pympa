@@ -11,21 +11,30 @@ admin.autodiscover()
 
 from users import views
 
+url_home = '%s/' % settings.SITE_PREFIX
+url_admin = '%s/admin/' % settings.SITE_PREFIX
+
 urlpatterns = patterns(
     '',
     url(r'^$',  # noqa
-        RedirectView.as_view(url='/admin/'), name='home'),
-    url(r'^password_reset/$',
+        RedirectView.as_view(url='/%s' % url_home), name='root'),
+    url(r'^%s$' % url_home,  # noqa
+        RedirectView.as_view(url='/%s' % url_admin), name='home'),
+    url(r'^%s/password_reset/$',
         views.AdminPasswordResetRedirectView.as_view(),
         name='admin_password_reset'),
 
     # admin
-    url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^%s/grappelli/' % settings.SITE_PREFIX,
+        include('grappelli.urls')),  # grappelli URLS
+    url(r'^%s' % url_admin,
+        include(admin.site.urls)),
 
     # User management
-    url(r'^accounts/', include('users.urls', namespace='users')),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r'^%s/accounts/' % settings.SITE_PREFIX,
+        include('users.urls', namespace='users')),
+    url(r'^%s/accounts/' % settings.SITE_PREFIX,
+        include('allauth.urls')),
 
     # Uncomment the next line to enable avatars
     # url(r'^avatar/', include('avatar.urls')),
