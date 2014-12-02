@@ -18,22 +18,21 @@ urlpatterns = patterns(
     '',
     url(r'^$',  # noqa
         RedirectView.as_view(url='/%s' % url_home), name='root'),
-    url(r'^%s$' % url_home,  # noqa
+    url(r'^{}$'.format(url_home),  # noqa
         RedirectView.as_view(url='/%s' % url_admin), name='home'),
-    url(r'^%s/password_reset/$',
+    url(r'^{}/password_reset/$'.format(settings.SITE_PREFIX),
         views.AdminPasswordResetRedirectView.as_view(),
         name='admin_password_reset'),
 
     # admin
-    url(r'^%s/grappelli/' % settings.SITE_PREFIX,
+    url(r'^{}/grappelli/'.format(settings.SITE_PREFIX),
         include('grappelli.urls')),  # grappelli URLS
-    url(r'^%s' % url_admin,
-        include(admin.site.urls)),
+    url(r'^{}'.format(url_admin), include(admin.site.urls)),
 
     # User management
-    url(r'^%s/accounts/' % settings.SITE_PREFIX,
+    url(r'^{}/accounts/'.format(settings.SITE_PREFIX),
         include('users.urls', namespace='users')),
-    url(r'^%s/accounts/' % settings.SITE_PREFIX,
+    url(r'^{}/accounts/'.format(settings.SITE_PREFIX),
         include('allauth.urls')),
 
     # Uncomment the next line to enable avatars
