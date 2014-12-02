@@ -90,7 +90,7 @@ class Production(Common):
 
     # EMAIL
     DEFAULT_FROM_EMAIL = values.Value('pympa <noreply@example.com>')
-    EMAIL_HOST = values.Value('smtp-relay.gmail.com')
+    EMAIL_HOST = values.Value('smtp.gmail.com')
     EMAIL_HOST_PASSWORD = values.SecretValue()
     EMAIL_HOST_USER = values.SecretValue()
     EMAIL_PORT = values.IntegerValue(587)
@@ -101,9 +101,9 @@ class Production(Common):
 
     DATABASES = {
         'default': dj_database_url.config(),
-        'old_version': dj_database_url.config(
-            env='DJANGO_OLD_DATABASE_URL',
-            default='postgres://localhost/pympa_old_version')
+        # 'other_db': dj_database_url.config(
+        #     env='DJANGO_OTHER_DB_DATABASE_URL',
+        #     default='postgres://localhost/other_db')
     }
 
     # TEMPLATE CONFIGURATION
