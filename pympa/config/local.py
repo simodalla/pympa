@@ -7,6 +7,7 @@ Local Configurations
 - Use Django Debug Toolbar
 '''
 from configurations import values
+
 from .common import Common
 
 
@@ -51,3 +52,8 @@ class Local(Common):
     TEST_GOOGLE_USER_FIRST_NAME = 'demo_djangogoogleapps'
     TEST_GOOGLE_CLIENT_ID = values.SecretValue()
     TEST_GOOGLE_CLIENT_SECRET = values.SecretValue()
+
+    ##### openheldesk #####
+    PACKAGE_NAME_FILEBROWSER = 'filebrowser_safe'
+    GRAPPELLI_INSTALLED = True
+    TESTING = None

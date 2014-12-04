@@ -57,6 +57,9 @@ class Common(Configuration):
         'pympa_core',
         'pympa_affarigenerali',
         'pympa_registrum',
+        'openhelpdesk',
+        'mezzanine.conf',
+        'mezzanine.core'
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
