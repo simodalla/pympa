@@ -57,3 +57,4 @@ class Local(Common):
     PACKAGE_NAME_FILEBROWSER = 'filebrowser_safe'
     GRAPPELLI_INSTALLED = True
     TESTING = None
+    HELPDESK_REQUESTERS = 'helpdesk_requesters'
