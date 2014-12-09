@@ -38,6 +38,7 @@ class Common(Configuration):
     )
     ADMIN_APPS = (
         # Admin
+        'autocomplete_light',
         'grappelli',
         'django.contrib.admin',
     )
