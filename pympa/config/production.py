@@ -55,8 +55,6 @@ class Production(Common):
     ALLOWED_HOSTS = ["*"]
     # END SITE CONFIGURATION
 
-    INSTALLED_APPS += ("gunicorn", )
-
     # # STORAGE CONFIGURATION
     # # See: http://django-storages.readthedocs.org/en/latest/index.html
     # INSTALLED_APPS += (
