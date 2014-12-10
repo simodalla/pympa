@@ -19,6 +19,10 @@ from configurations import Configuration, values
 BASE_DIR = dirname(dirname(__file__))
 
 
+def get_tuple_of_tuples(t):
+    return t if not hasattr(t, 'split') else tuple(t.split(','))
+
+
 class Common(Configuration):
 
     SITE_PREFIX = 'pympa'
@@ -54,13 +58,9 @@ class Common(Configuration):
     # Apps specific for this project go here.
     LOCAL_APPS = (
         'users',  # custom users app
-        # Your stuff: custom apps go here
         'pympa_core',
         'pympa_affarigenerali',
         'pympa_registrum',
-        'openhelpdesk',
-        'mezzanine.conf',
-        'mezzanine.core'
     )
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -114,9 +114,10 @@ class Common(Configuration):
 
     # MANAGER CONFIGURATION
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-    ADMINS = (
-        ("""Simone Dalla""", 'simodalla@gmail.com'),
-    )
+
+
+    ADMINS = values.TupleValue((('admins', 'admins@example.com'),),
+                               separator=';', converter=get_tuple_of_tuples)
 
     # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
     MANAGERS = ADMINS

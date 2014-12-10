@@ -19,7 +19,12 @@ class Local(Common):
     # END DEBUG
 
     # INSTALLED_APPS
-    INSTALLED_APPS = Common.INSTALLED_APPS
+    INSTALLED_APPS = Common.INSTALLED_APPS + (
+        'openhelpdesk',
+        'mezzanine.conf',
+        'mezzanine.core'
+    )
+
     # END INSTALLED_APPS
 
     # Mail settings
